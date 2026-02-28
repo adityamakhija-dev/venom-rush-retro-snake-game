@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Venom Rush— Cross-platform Web Game</title>
+<style>
+  :root{
+    --bg1:#081229; --bg2:#0b3b5b; --accent:#ffd166; --muted:#9fb4c8;
+    --ui-bg: rgba(255,255,255,0.06);
+    --btn-size: 64px;
+  }
+  html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg1),var(--bg2));-webkit-user-select:none;user-select:none;}
+  .wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:12px;box-sizing:border-box}
+  .game-card{width:100%;max-width:900px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border-radius:16px;padding:14px;box-sizing:border-box;backdrop-filter:blur(6px);box-shadow:0 6px 30px rgba(0,0,0,0.6)}
+  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .title{color:var(--accent);font-family:Inter,system-ui,Segoe UI,Roboto,Arial;font-weight:700}
+  .meta{color:var(--muted);font-size:13px}
+  canvas{display:block;width:100%;height:auto;border-radius:8px;background:transparent}
+  .controls{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+  .left, .right{display:flex;gap:8px;align-items:center}
+  .btn{background:var(--ui-bg);border-radius:10px;padding:8px 12px;color:var(--muted);font-weight:600;border:1px solid rgba(255,255,255,0.04)}
+  .big-btn{padding:10px 14px;font-size:15px}
+  .hud{display:flex;gap:12px;align-items:center}
+  .stat{color:var(--muted);font-weight:700}/* mobile on-screen D-pad */ .dpad{position:relative;width:calc(var(--btn-size)*2.2);height:calc(var(--btn-size)*2.2);touch-action:none} .dpad .pad-btn{position:absolute;width:var(--btn-size);height:var(--btn-size);border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--ui-bg);border:1px solid rgba(255,255,255,0.04);} .up{left:calc(50% - var(--btn-size)/2);top:0} .down{left:calc(50% - var(--btn-size)/2);bottom:0} .left-btn{left:0;top:calc(50% - var(--btn-size)/2)} .right-btn{right:0;top:calc(50% - var(--btn-size)/2)} .pad-icon{font-size:20px;color:var(--muted);pointer-events:none}
+
+.footer{margin-top:10px;color:var(--muted);font-size:12px;text-align:center}
+
+@media (max-width:480px){ .game-card{padding:10px} :root{--btn-size:56px} } </style>
+
+</head>
+<body>
+<div class="wrap">
+  <div class="game-card">
+    <div class="topbar">
+      <div>
+        <div class="title">Venom Rush</div>
+        <div class="meta">Touch-friendly • Swipe to move • High DPI rendering</div>
+      </div>
+      <div class="hud">
+        <div class="stat">Score: <span id="score">0</span></div>
+        <div class="stat">High: <span id="high">0</span></div>
+      </div>
+    </div><canvas id="gameCanvas" width="720" height="480" aria-label="Snake game canvas"></canvas>
+
+<div class="controls">
+  <div class="left">
+    <button id="btnPause" class="btn">Pause</button>
+    <button id="btnRestart" class="btn big-btn">Restart</button>
+  </div>
+  <div class="right">
+    <div class="dpad" id="dpad" aria-hidden="false">
+      <div class="pad-btn up" data-dir="0,-1"><div class="pad-icon">▲</div></div>
+      <div class="pad-btn down" data-dir="0,1"><div class="pad-icon">▼</div></div>
+      <div class="pad-btn left-btn" data-dir="-1,0"><div class="pad-icon">◀</div></div>
+      <div class="pad-btn right-btn" data-dir="1,0"><div class="pad-icon">▶</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">Tip: Swipe on the game area to steer. Works with mouse, keyboard, touch, and tilt (if allowed).</div>
+
+  </div>
+</div><script>
+/* Venom Rush — JavaScript (single file)
+   Features:
+   - Responsive high-DPI canvas
+   - Adaptive grid & smooth snake rendering
+   - Swipe and on-screen buttons for mobile; keyboard for desktop
+   - Particles when eating; glow effects
+   - LocalStorage high score
+   - Simple WebAudio beeps
+*/
+
+(() => {
+  const canvas = document.getElementById('gameCanvas');
+  const ctx = canvas.getContext('2d');
+  let DPR = Math.max(1, window.devicePixelRatio || 1);
+
+  const scoreEl = document.getElementById('score');
+  const highEl = document.getElementById('high');
+  const btnPause = document.getElementById('btnPause');
+  const btnRestart = document.getElementById('btnRestart');
+  const dpad = document.getElementById('dpad');
+
+  // Config
+  const BASE_CELL = 18; // base size in CSS pixels — final uses DPR scaling
+  const COLUMNS = 32; // target columns (will scale to fit)
+  const FPS_BASE = 10; // starting speed
+
+  let cols = COLUMNS;
+  let rows = 20;
+  let cell = BASE_CELL;
+  let width, height;
+
+  function resizeCanvas(){
+    // fit width to parent card width, maintain aspect ratio by columns/rows
+    const rect = canvas.getBoundingClientRect();
+    DPR = Math.max(1, window.devicePixelRatio || 1);
+    cols = COLUMNS;
+    cell = Math.floor(rect.width / cols);
+    if(cell < 10) cell = 10;
+    width = cell * cols;
+    rows = Math.floor((rect.height || (cell*20)) / cell) || 20;
+    height = cell * rows;
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+    canvas.width = Math.round(width * DPR);
+    canvas.height = Math.round(height * DPR);
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  // Game state
+  const state = {
+    snake: [],
+    dir: {x:1,y:0},
+    nextDir: {x:1,y:0},
+    food: null,
+    score:0,
+    best: parseInt(localStorage.getItem('better_snake_high')||'0',10),
+    running: true,
+    gameover: false,
+    speed: FPS_BASE,
+    frameCount:0,
+  };
+  highEl.textContent = state.best;
+
+  // Audio
+  const audioCtx = (typeof AudioContext !== 'undefined') ? new AudioContext() : null;
+  function beep(freq=440, duration=0.06, volume=0.06){
+    if(!audioCtx) return;
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = 'sine'; o.frequency.value = freq;
+    g.gain.value = volume;
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start();
+    o.stop(audioCtx.currentTime + duration);
+  }
+
+  // Utility
+  function randEmpty(){
+    const cells = [];
+    for(let x=0;x<cols;x++) for(let y=0;y<rows;y++) cells.push({x,y});
+    const occupied = new Set(state.snake.map(p=>p.x+','+p.y));
+    const free = cells.filter(c=>!occupied.has(c.x+','+c.y));
+    return free[Math.floor(Math.random()*free.length)];
+  }
+
+  function reset(){
+    state.snake = [];
+    const sx = Math.floor(cols/2);
+    const sy = Math.floor(rows/2);
+    state.snake.push({x:sx,y:sy});
+    state.snake.push({x:sx-1,y:sy});
+    state.snake.push({x:sx-2,y:sy});
+    state.dir = {x:1,y:0}; state.nextDir = {x:1,y:0};
+    state.food = randEmpty();
+    state.score = 0; state.gameover=false; state.running=true; state.speed = FPS_BASE; state.frameCount=0;
+    scoreEl.textContent = state.score;
+  }
+  reset();
+
+  // Particles
+  const particles = [];
+  function spawnParticles(x,y,color){
+    for(let i=0;i<14;i++) particles.push({x:x+0.5,y:y+0.5,vx:(Math.random()-0.5)*0.9, vy:(Math.random()-0.7)*0.9, life:30, col:color});
+  }
+  function updateParticles(){
+    for(let i=particles.length-1;i>=0;i--){
+      const p = particles[i]; p.x += p.vx; p.y += p.vy; p.vy += 0.02; p.life--;
+      if(p.life<=0) particles.splice(i,1);
+    }
+  }
+
+  // Drawing helpers
+  function drawRoundedRect(x,y,w,h,r){
+    ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); ctx.fill();
+  }
+
+  function draw(){
+    // background texture
+    ctx.clearRect(0,0,width,height);
+    // subtle grid background
+    const g = ctx.createLinearGradient(0,0,0,height);
+    g.addColorStop(0,'rgba(255,255,255,0.02)'); g.addColorStop(1,'rgba(0,0,0,0.06)');
+    ctx.fillStyle = g; ctx.fillRect(0,0,width,height);
+
+    // draw food glow
+    const f = state.food;
+    if(f){
+      const fx = f.x*cell, fy = f.y*cell;
+      const rad = cell*0.55;
+      const grad = ctx.createRadialGradient(fx+cell/2,fy+cell/2,0,fx+cell/2,fy+cell/2,rad);
+      grad.addColorStop(0,'rgba(255,210,102,0.95)'); grad.addColorStop(0.5,'rgba(255,140,80,0.8)'); grad.addColorStop(1,'rgba(255,140,80,0)');
+      ctx.fillStyle = grad; ctx.beginPath(); ctx.arc(fx+cell/2,fy+cell/2,rad,0,Math.PI*2); ctx.fill();
+      // center simple fruit
+      ctx.fillStyle='rgba(255,220,120,1)'; ctx.beginPath(); ctx.arc(fx+cell/2,fy+cell/2,cell*0.28,0,Math.PI*2); ctx.fill();
+    }
+
+    // particles
+    ctx.globalAlpha = 1;
+    particles.forEach(p=>{
+      ctx.globalAlpha = Math.max(0, p.life/30);
+      ctx.fillStyle = p.col; ctx.beginPath(); ctx.arc(p.x*cell,p.y*cell,Math.max(1,cell*0.06),0,Math.PI*2); ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+
+    // draw snake with textured segments
+    for(let i=state.snake.length-1;i>=0;i--){
+      const s = state.snake[i];
+      const x = s.x*cell, y = s.y*cell;
+      // head brighter
+      const t = (i===0) ? 1 : 0.85 - i*0.01;
+      // make a slight inner shadow
+      ctx.save();
+      ctx.translate(x,y);
+      // segment background
+      ctx.fillStyle = `rgba(${40+Math.floor(160*t)},${Math.floor(200*Math.min(1,t))},40,0.95)`;
+      drawRoundedRect(2,2,cell-4,cell-4,Math.max(4,cell*0.12));
+      // scale for pattern
+      ctx.restore();
+    }
+
+    // draw grid lines subtly
+    ctx.strokeStyle = 'rgba(0,0,0,0.06)'; ctx.lineWidth=1;
+    for(let gx=0;gx<=cols;gx++){ ctx.beginPath(); ctx.moveTo(gx*cell+0.5,0); ctx.lineTo(gx*cell+0.5,height); ctx.stroke(); }
+    for(let gy=0;gy<=rows;gy++){ ctx.beginPath(); ctx.moveTo(0,gy*cell+0.5); ctx.lineTo(width,gy*cell+0.5); ctx.stroke(); }
+
+    if(state.gameover){
+      ctx.fillStyle='rgba(0,0,0,0.45)'; ctx.fillRect(0,0,width,height);
+      ctx.fillStyle='white'; ctx.font = Math.max(22,cell) + "px sans-serif";
+      ctx.textAlign='center'; ctx.fillText('GAME OVER', width/2, height/2 - 10);
+      ctx.font = Math.max(12,cell*0.5) + "px sans-serif";
+      ctx.fillText('Tap Restart to play again', width/2, height/2 + 22);
+    }
+  }
+
+  function step(){
+    if(!state.running || state.gameover) return;
+    state.frameCount++;
+    const interval = Math.max(1, Math.floor(60 / state.speed));
+    if(state.frameCount % interval !== 0) return;
+
+    state.dir = state.nextDir;
+    const head = {...state.snake[0]};
+    head.x += state.dir.x; head.y += state.dir.y;
+    // wrap-around
+    if(head.x < 0) head.x = cols -1; if(head.x >= cols) head.x = 0;
+    if(head.y < 0) head.y = rows -1; if(head.y >= rows) head.y = 0;
+
+    // collision
+    if(state.snake.some(s => s.x===head.x && s.y===head.y)){
+      state.gameover = true; state.running = false; beep(120,0.08,0.08);
+      return;
+    }
+    state.snake.unshift(head);
+    if(head.x === state.food.x && head.y === state.food.y){
+      state.score += 1; scoreEl.textContent = state.score;
+      spawnParticles(head.x, head.y, 'rgba(255,200,110,0.9)');
+      beep(700,0.04,0.05);
+      // place new food
+      state.food = randEmpty();
+      // increase speed slightly every 3 points
+      if(state.score % 3 === 0) state.speed += 0.6;
+      if(state.score > state.best){ state.best = state.score; highEl.textContent = state.best; localStorage.setItem('better_snake_high', state.best); }
+    } else {
+      state.snake.pop();
+    }
+  }
+
+  function gameLoop(){
+    updateParticles();
+    step();
+    draw();
+    requestAnimationFrame(gameLoop);
+  }
+  requestAnimationFrame(gameLoop);
+
+  // Input: keyboard
+  window.addEventListener('keydown', e => {
+    if(['ArrowUp','w','W'].includes(e.key)) trySetDir(0,-1);
+    if(['ArrowDown','s','S'].includes(e.key)) trySetDir(0,1);
+    if(['ArrowLeft','a','A'].includes(e.key)) trySetDir(-1,0);
+    if(['ArrowRight','d','D'].includes(e.key)) trySetDir(1,0);
+    if(e.key === ' ') { state.running = !state.running; btnPause.textContent = state.running ? 'Pause' : 'Resume'; }
+  });
+
+  // On-screen dpad
+  dpad.querySelectorAll('.pad-btn').forEach(el=>{
+    el.addEventListener('touchstart', ev => { ev.preventDefault(); const dir = el.dataset.dir.split(',').map(Number); trySetDir(dir[0],dir[1]); });
+    el.addEventListener('mousedown', ev => { ev.preventDefault(); const dir = el.dataset.dir.split(',').map(Number); trySetDir(dir[0],dir[1]); });
+  });
+
+  // swipe detection on canvas
+  let touchStart = null;
+  const SWIPE_MIN = 10; // px
+  canvas.addEventListener('touchstart', e=>{ if(e.touches.length===1){ const t = e.touches[0]; touchStart = {x:t.clientX, y:t.clientY}; } }, {passive:false});
+  canvas.addEventListener('touchmove', e=>{ if(e.touches.length===1 && touchStart){ e.preventDefault(); } }, {passive:false});
+  canvas.addEventListener('touchend', e=>{ if(!touchStart) return; const t = (e.changedTouches && e.changedTouches[0]) || {}; const dx = (t.clientX - touchStart.x); const dy = (t.clientY - touchStart.y); if(Math.abs(dx)>Math.abs(dy) && Math.abs(dx)>SWIPE_MIN){ trySetDir(dx>0?1:-1,0); } else if(Math.abs(dy)>SWIPE_MIN){ trySetDir(0, dy>0?1:-1); } touchStart = null; }, {passive:false});
+
+  // mouse drag for desktop
+  let mdStart = null;
+  canvas.addEventListener('mousedown', e=>{ mdStart = {x:e.clientX,y:e.clientY}; });
+  canvas.addEventListener('mouseup', e=>{ if(!mdStart) return; const dx = e.clientX - mdStart.x; const dy = e.clientY - mdStart.y; if(Math.abs(dx)>Math.abs(dy) && Math.abs(dx)>SWIPE_MIN){ trySetDir(dx>0?1:-1,0); } else if(Math.abs(dy)>SWIPE_MIN){ trySetDir(0, dy>0?1:-1); } mdStart = null; });
+
+  // trySetDir: prevent opposite direction
+  function trySetDir(x,y){ if(state.gameover) return; if((x===-state.dir.x && y===-state.dir.y)) return; state.nextDir = {x,y}; }
+
+  // buttons
+  btnPause.addEventListener('click', ()=>{ state.running = !state.running; btnPause.textContent = state.running ? 'Pause' : 'Resume'; if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume(); });
+  btnRestart.addEventListener('click', ()=>{ reset(); if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume(); });
+
+  // prevent scrolling on touch
+  document.body.addEventListener('touchmove', function(e){ if(e.target === canvas || canvas.contains(e.target)) e.preventDefault(); }, {passive:false});
+
+  // initial resize and populate snake to fit
+  function initGridFromSize(){ resizeCanvas(); // recalc cols/rows
+    // ensure snake positions in bounds
+    reset();
+    // center snake length adjust
+    state.snake = [{x:Math.floor(cols/2),y:Math.floor(rows/2)},{x:Math.floor(cols/2)-1,y:Math.floor(rows/2)},{x:Math.floor(cols/2)-2,y:Math.floor(rows/2)}];
+  }
+  initGridFromSize();
+
+  // keep canvas crisp when orientation changes
+  window.addEventListener('orientationchange', ()=>{ setTimeout(()=>{ initGridFromSize(); },200); });
+
+})();
+</script></body>
+</html>
