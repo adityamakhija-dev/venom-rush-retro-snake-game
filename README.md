@@ -104,7 +104,6 @@ Open index.html in your browser
 👨‍💻 Developer
 
 Aditya
-
 Frontend Developer | JavaScript Enthusiast | Web App Builder
 
 LinkedIn:
