@@ -2,8 +2,8 @@
 
 Premium Fast-Paced Survival Arcade Web Game
 
-""🌐 Live Demo (Netlify)" (https://img.shields.io/badge/🌐_Live_Demo-Netlify-brightgreen?style=for-the-badge&logo=netlify&logoColor=white)" (https://venomrushgame.netlify.app/)
-""⚡ Live Demo (GitHub Pages)" (https://img.shields.io/badge/⚡_Live_Demo-GitHub_Pages-black?style=for-the-badge&logo=github)" (https://adityamakhija-dev.github.io/venom-rush-retro-snake-game/)
+""🌐 Project Link (Netlify)" (https://img.shields.io/badge/🌐_Project_Link-Netlify-brightgreen?style=for-the-badge&logo=netlify&logoColor=white)" (https://venomrushgame.netlify.app/)
+""⚡ Project Link (GitHub Pages)" (https://img.shields.io/badge/⚡_Project_Link-GitHub_Pages-black?style=for-the-badge&logo=github)" (https://adityamakhija-dev.github.io/venom-rush-retro-snake-game/)
 ""💻 Source Code" (https://img.shields.io/badge/💻_Source_Code-GitHub-blue?style=for-the-badge&logo=github)" (https://github.com/adityamakhija-dev/venom-rush-retro-snake-game)
 ""👨‍💼 LinkedIn" (https://img.shields.io/badge/👨‍💼_LinkedIn-Aditya-blue?style=for-the-badge&logo=linkedin)" (https://www.linkedin.com/in/adityamakhija-dev)
 
@@ -18,13 +18,16 @@ Built with clean frontend architecture and optimized JavaScript logic, this proj
 
 <br><img src="venom-rush.jpg" alt="Venom Rush Game Preview" width="850"></div>---
 
-🚀 Project Link
+🔗 Project Links
 
 🌐 Netlify (Primary):
 https://venomrushgame.netlify.app/
 
 ⚡ GitHub Pages:
 https://adityamakhija-dev.github.io/venom-rush-retro-snake-game/
+
+💻 GitHub Repository:
+https://github.com/adityamakhija-dev/venom-rush-retro-snake-game
 
 ---
 
@@ -132,5 +135,3 @@ This project is part of my frontend development portfolio showcasing practical s
 ✔ Live Deployment
 
 I am actively open to Frontend Developer Opportunities.
-
-</div>
