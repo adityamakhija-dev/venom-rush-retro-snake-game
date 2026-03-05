@@ -1,61 +1,69 @@
 <div align="center">
 
-# 🕷️ Venom Rush Retro Snake Game
+# 🕷️ Venom Rush – Retro Snake Game
 
 ### Premium Fast-Paced Survival Arcade Web Game
 
-[![🌐 PROJECT LINK](https://img.shields.io/badge/🌐_PROJECT_LINK-PLAY_NOW-brightgreen?style=for-the-badge&logo=netlify&logoColor=white)](https://venomrushgame.netlify.app/)
+<a href="https://venomrushgame.netlify.app/">
+<img src="https://img.shields.io/badge/🎮_PLAY_GAME-LIVE_DEMO-brightgreen?style=for-the-badge&logo=netlify&logoColor=white">
+</a>
 
-[![⚡ GITHUB PAGES](https://img.shields.io/badge/⚡_GITHUB_PAGES-VISIT-black?style=for-the-badge&logo=github)](https://adityamakhija-dev.github.io/venom-rush-retro-snake-game/)
+<a href="https://github.com/adityamakhija-dev/venom-rush-retro-snake-game">
+<img src="https://img.shields.io/badge/💻_SOURCE_CODE-GITHUB-blue?style=for-the-badge&logo=github">
+</a>
 
-[![💻 SOURCE CODE](https://img.shields.io/badge/💻_SOURCE_CODE-GITHUB-blue?style=for-the-badge&logo=github)](https://github.com/adityamakhija-dev/venom-rush-retro-snake-game)
+<a href="https://www.linkedin.com/in/adityamakhija-dev">
+<img src="https://img.shields.io/badge/👨‍💼_CONNECT-LINKEDIN-blue?style=for-the-badge&logo=linkedin">
+</a>
 
-[![👨‍💼 LINKEDIN](https://img.shields.io/badge/👨‍💼_LINKEDIN-CONNECT-blue?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/adityamakhija-dev)
+<br><br>
 
-<br>
-
-[![HTML5](https://img.shields.io/badge/HTML5-MARKUP-orange?style=for-the-badge&logo=html5&logoColor=white)]()
-
-[![CSS3](https://img.shields.io/badge/CSS3-STYLING-blue?style=for-the-badge&logo=css3&logoColor=white)]()
-
-[![JavaScript](https://img.shields.io/badge/JAVASCRIPT-GAME_LOGIC-yellow?style=for-the-badge&logo=javascript&logoColor=black)]()
-
-[![Responsive](https://img.shields.io/badge/RESPONSIVE-DESIGN-success?style=for-the-badge&logo=googlechrome)]()
-
-<br>
-
-**Venom Rush is a modern, feature-rich retro snake survival web game built using HTML5, CSS3, and JavaScript.**
-
-**It delivers smooth animations, fast performance, responsive gameplay, and a premium arcade-style user experience.**
+![HTML5](https://img.shields.io/badge/HTML5-Markup-orange?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-Styling-blue?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-Game_Logic-yellow?style=for-the-badge&logo=javascript&logoColor=black)
+![Responsive](https://img.shields.io/badge/Responsive-Design-success?style=for-the-badge&logo=googlechrome)
 
 <br>
 
-## 🎮 Gameplay Preview
+**Venom Rush** is a modern retro-style **Snake survival game** built with **HTML5, CSS3, and pure JavaScript**.
 
-<img src="venom-rush-gameplay.gif" width="850" alt="Venom Rush Gameplay Preview">
-
-<br>
-
-## 📸 Game Screenshot
-
-<img src="venom-rush.jpg" width="850" alt="Venom Rush Game Screenshot">
+It delivers **smooth gameplay, responsive controls, real-time score tracking, and an engaging arcade experience directly in the browser.**
 
 </div>
 
 ---
 
-# 🚀 Project Links
+## 🎮 Gameplay Preview
 
-### 🌐 Netlify (Primary)
+<div align="center">
 
+<img src="venom-rush-gameplay.gif" width="900" alt="Venom Rush Gameplay">
+
+</div>
+
+---
+
+## 🖼 Game Interface
+
+<div align="center">
+
+<img src="venom-rush-image.jpg" width="900" alt="Venom Rush Game Interface">
+
+</div>
+
+---
+
+## 🚀 Quick Demo
+
+Play **Venom Rush** instantly in your browser.
+
+🎮 **Netlify Live Game**  
 https://venomrushgame.netlify.app/
 
-### ⚡ GitHub Pages
-
+⚡ **GitHub Pages Demo**  
 https://adityamakhija-dev.github.io/venom-rush-retro-snake-game/
 
-### 💻 GitHub Repository
-
+💻 **GitHub Repository**  
 https://github.com/adityamakhija-dev/venom-rush-retro-snake-game
 
 ---
@@ -67,88 +75,41 @@ https://github.com/adityamakhija-dev/venom-rush-retro-snake-game
 🎯 Real-Time Score Tracking  
 📱 Fully Responsive Design  
 🚀 Fast Performance  
-🎨 Premium UI Design  
+🎨 Clean Arcade-Style UI  
 
 ---
 
-# 🛠️ Tech Stack
+# 🛠 Tech Stack
 
-Frontend:
+### Frontend
+- HTML5
+- CSS3
+- JavaScript
 
-HTML5  
-CSS3  
-JavaScript  
+### Deployment
+- Netlify
+- GitHub Pages
 
-Deployment:
-
-Netlify  
-GitHub Pages  
-
-Version Control:
-
-GitHub  
+### Version Control
+- Git & GitHub
 
 ---
 
 # 🎯 Project Purpose
 
-This project demonstrates:
+This project demonstrates practical frontend development skills including:
 
-• Frontend Development Skills  
-• Game Logic Implementation  
+• JavaScript Game Logic Implementation  
 • DOM Manipulation  
-• Responsive Design  
-• Live Deployment  
+• Responsive UI Design  
+• Performance Optimization  
+• Live Web Deployment  
 
 ---
 
 # 📂 Run Locally
 
-Clone:• Game Logic Implementation  
-• DOM Manipulation  
-• Responsive Design  
-• Live Deployment  
+Clone the repository:
 
----
-
-# 📂 Run Locally
-
-Clone:
-
-```
+```bash
 git clone https://github.com/adityamakhija-dev/venom-rush-retro-snake-game.git
-```
-
-Open:
-
-```
-index.html
-```
-
----
-
-# 👨‍💻 Developer
-
-Aditya
-
-Frontend Developer
-
-LinkedIn  
-https://www.linkedin.com/in/adityamakhija-dev
-
-GitHub  
-https://github.com/adityamakhija-dev
-
----
-
-# ⭐ Support
-
-If you like this project, please give it a ⭐ on GitHub.
-
----
-
-# 📌 Recruiter Note
-
-This is a professional portfolio project showcasing real-world frontend and JavaScript development skills.
-
-I am open to Frontend Developer opportunities.
