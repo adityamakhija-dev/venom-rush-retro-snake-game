@@ -4,7 +4,7 @@ Premium Fast-Paced Survival Arcade Web Game
 
 🚀 A portfolio project showcasing JavaScript game development, DOM manipulation, and responsive frontend engineering.
 
-<a href="https://venomrushgame.netlify.app/">
+<br><a href="https://venomrushgame.netlify.app/">
 <img src="https://img.shields.io/badge/🎮_PLAY_GAME-LIVE_DEMO-brightgreen?style=for-the-badge&logo=netlify&logoColor=white">
 </a><a href="https://github.com/adityamakhija-dev/venom-rush-retro-snake-game">
 <img src="https://img.shields.io/badge/💻_SOURCE_CODE-GITHUB-blue?style=for-the-badge&logo=github">
@@ -25,17 +25,21 @@ It delivers smooth gameplay, responsive controls, real-time score tracking, and 
 
 🎮 Gameplay Preview
 
-<div align="center"><img src="venom-rush-gameplay.gif" width="900" alt="Venom Rush Gameplay"></div>---
+<div align="center">
+<img src="venom-rush-gameplay.gif" width="900" alt="Venom Rush Gameplay">
+</div>---
 
 🖼 Game Interface
 
-<div align="center"><img src="venom-rush-image.jpg" width="900" alt="Venom Rush Game Interface"></div>---
+<div align="center">
+<img src="venom-rush-image.jpg" width="900" alt="Venom Rush Game Interface">
+</div>---
 
-🚀 Quick Demo
+🚀 Play the Game
 
 Play Venom Rush instantly in your browser.
 
-🎮 Netlify Live Game
+🎮 Live Game (Netlify)
 https://venomrushgame.netlify.app/
 
 ⚡ Alternative Live Version (GitHub Pages)
@@ -81,7 +85,7 @@ Version Control
 
 This project was built to demonstrate practical frontend development skills through an interactive browser game.
 
-Key areas showcased in this project include:
+Key areas showcased include:
 
 • JavaScript Game Logic Implementation
 • DOM Manipulation and Real-Time Updates
@@ -116,8 +120,11 @@ I enjoy building interactive web experiences, tools, and games using modern fron
 
 I am currently open to Frontend Developer opportunities and excited to contribute to real-world products and engineering teams.
 
-🔗 Portfolio: https://adityamakhija-dev.github.io
-🔗 LinkedIn: https://www.linkedin.com/in/adityamakhija-dev
+🔗 Portfolio:
+https://adityamakhija-dev.github.io
+
+🔗 LinkedIn:
+https://www.linkedin.com/in/adityamakhija-dev
 
 ---
 
@@ -127,11 +134,11 @@ Clone the repository:
 
 git clone https://github.com/adityamakhija-dev/venom-rush-retro-snake-game.git
 
-Navigate to the project folder:
+Navigate into the project folder:
 
 cd venom-rush-retro-snake-game
 
-Open the project in your browser by launching:
+Open the project in your browser:
 
 index.html
 
@@ -150,17 +157,3 @@ It helps support the project and motivates further development.
 📄 License
 
 This project is open-source and available under the MIT License.
-• JavaScript Game Logic Implementation  
-• DOM Manipulation  
-• Responsive UI Design  
-• Performance Optimization  
-• Live Web Deployment  
-
----
-
-# 📂 Run Locally
-
-Clone the repository:
-
-```bash
-git clone https://github.com/adityamakhija-dev/venom-rush-retro-snake-game.git
