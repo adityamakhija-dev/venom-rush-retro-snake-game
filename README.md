@@ -30,7 +30,15 @@
 
 <br>
 
-<img src="venom-rush.jpg" width="850">
+## 🎮 Gameplay Preview
+
+<img src="venom-rush-gameplay.gif" width="850" alt="Venom Rush Gameplay Preview">
+
+<br>
+
+## 📸 Game Screenshot
+
+<img src="venom-rush.jpg" width="850" alt="Venom Rush Game Screenshot">
 
 </div>
 
@@ -88,6 +96,15 @@ This project demonstrates:
 
 • Frontend Development Skills  
 • Game Logic Implementation  
+• DOM Manipulation  
+• Responsive Design  
+• Live Deployment  
+
+---
+
+# 📂 Run Locally
+
+Clone:• Game Logic Implementation  
 • DOM Manipulation  
 • Responsive Design  
 • Live Deployment  
